@@ -37,6 +37,7 @@ func main() {
 		}
 
 		total := int64(size)
+		c.Header("cache-control", "public, max-age=7200")
 		_, err = io.CopyN(c.Writer, RandomReader{}, total)
 		if err != nil {
 			c.String(http.StatusInternalServerError, err.Error())
