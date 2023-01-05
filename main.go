@@ -5,6 +5,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/gin-gonic/gin"
 	"io"
+	"math"
 	"net/http"
 	"time"
 )
@@ -28,12 +29,17 @@ func main() {
 		c.String(http.StatusOK, "🔥 sent %d bytes to /dev/null in %s", written, elapsed)
 	})
 
-	router.Any("/dev/bytes/:size", func(c *gin.Context) {
+	devRandom := func(c *gin.Context) {
 		input := c.Param("size")
-		size, err := humanize.ParseBytes(input)
-		if err != nil {
-			c.String(http.StatusBadRequest, err.Error())
-			return
+		var size uint64 = math.MaxUint64 / 2
+		var err error
+
+		if input != "" {
+			size, err = humanize.ParseBytes(input)
+			if err != nil {
+				c.String(http.StatusBadRequest, err.Error())
+				return
+			}
 		}
 
 		total := int64(size)
@@ -42,6 +48,9 @@ func main() {
 		if err != nil {
 			c.String(http.StatusInternalServerError, err.Error())
 		}
-	})
+	}
+
+	router.Any("/dev/random", devRandom)
+	router.Any("/dev/random/:size", devRandom)
 	_ = router.Run(":8080")
 }
