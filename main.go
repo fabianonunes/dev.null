@@ -2,10 +2,12 @@ package main
 
 import (
 	"crypto/rand"
+	"fmt"
 	"github.com/dustin/go-humanize"
 	"github.com/gin-gonic/gin"
 	"io"
 	"math"
+	mrand "math/rand"
 	"net/http"
 	"time"
 )
@@ -51,6 +53,10 @@ func main() {
 	}
 
 	router.Any("/dev/random", devRandom)
+	router.Any("/dev/random/any", func(c *gin.Context) {
+		c.Header("cache-control", "private, max-age=0")
+		c.Redirect(http.StatusFound, fmt.Sprintf("/dev/random/%dMiB", mrand.Intn(50)))
+	})
 	router.Any("/dev/random/:size", devRandom)
 	_ = router.Run(":8080")
 }
