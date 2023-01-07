@@ -55,7 +55,8 @@ func main() {
 	router.Any("/dev/random", devRandom)
 	router.Any("/dev/random/any", func(c *gin.Context) {
 		c.Header("cache-control", "private, max-age=0")
-		c.Redirect(http.StatusFound, fmt.Sprintf("/dev/random/%dMiB", mrand.Intn(50)))
+		location := fmt.Sprintf("/dev/random/%dMiB?%d", mrand.Intn(50), mrand.Intn(150000))
+		c.Redirect(http.StatusFound, location)
 	})
 	router.Any("/dev/random/:size", devRandom)
 	_ = router.Run(":8080")
