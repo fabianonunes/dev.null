@@ -22,6 +22,7 @@ func (reader RandomReader) Read(b []byte) (int, error) {
 
 func main() {
 	router := gin.Default()
+
 	router.Any("/dev/null", func(c *gin.Context) {
 		start := time.Now()
 		written, err := io.Copy(io.Discard, c.Request.Body)
@@ -34,7 +35,7 @@ func main() {
 
 	devRandom := func(c *gin.Context) {
 		input := c.Param("size")
-		var size uint64 = math.MaxUint64 / 2
+		var size uint64 = math.MaxUint32 / 2
 		var err error
 
 		if input != "" {
