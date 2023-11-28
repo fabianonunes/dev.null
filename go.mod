@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/gin-gonic/gin v1.8.0
+	github.com/thanhpk/randstr v1.0.4
 )
 
 require (
