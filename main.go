@@ -23,6 +23,10 @@ func (reader RandomReader) Read(b []byte) (int, error) {
 func main() {
 	router := gin.Default()
 
+	router.GET("/healthcheck", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
+	})
+
 	router.Any("/dev/null", func(c *gin.Context) {
 		start := time.Now()
 		written, err := io.Copy(io.Discard, c.Request.Body)
